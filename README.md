@@ -37,15 +37,15 @@ The code unpickles the raw files and extracts:
 ### 2. Data preprocessing
 The raw CIFAR-100 image vectors are reshaped from:
 
-\[
+$$
 (50000, 3072) \rightarrow (50000, 3, 32, 32)
-\]
+$$
 
 The images are then normalised to:
 
-\[
+$$
 [0,1]
-\]
+$$
 
 A validation split is created from the original training set using `train_test_split`, so calibration is fitted on a validation set rather than on the test set.
 
@@ -59,19 +59,19 @@ The NumPy arrays are converted into PyTorch tensors and wrapped in `TensorDatase
 Two calibration metrics have been implemented manually:
 
 #### Expected Calibration Error (ECE)
-\[
+$$
 \text{ECE} = \sum_{m=1}^{M} \frac{|B_m|}{n} \left| \text{acc}(B_m) - \text{conf}(B_m) \right|
-\]
+$$
 
 #### Maximum Calibration Error (MCE)
-\[
+$$
 \text{MCE} = \max_m \left| \text{acc}(B_m) - \text{conf}(B_m) \right|
-\]
+$$
 
 where:
-- \(B_m\) is the set of predictions in confidence bin \(m\)
-- \(\text{acc}(B_m)\) is bin accuracy
-- \(\text{conf}(B_m)\) is average confidence in the bin
+- $B_m$ is the set of predictions in confidence bin $m$
+- $\text{acc}(B_m)$ is bin accuracy
+- $\text{conf}(B_m)$ is average confidence in the bin
 
 ### 5. Reliability diagram
 A custom reliability diagram function has been written to visualise the gap between:
@@ -104,21 +104,21 @@ This is necessary because temperature scaling works by rescaling **logits**, not
 A custom `TemperatureScaler` class has been implemented.
 
 The workflow is:
-1. take validation logits
-2. divide logits by temperature \(T\)
-3. apply softmax
-4. compute NLL
-5. optimise \(T\) using `scipy.optimize.minimize_scalar`
+1. Take validation logits
+2. Divide logits by temperature $T$
+3. Apply softmax
+4. Compute NLL
+5. Optimize $T$ using `scipy.optimize.minimize_scalar`
 
 The calibrated probabilities are computed as:
 
-\[
+$$
 \text{softmax}(z / T)
-\]
+$$
 
 where:
-- \(z\) = logits
-- \(T > 0\) = learned temperature parameter
+- $z$ = logits
+- $T > 0$ = learned temperature parameter
 
 ### 10. Before vs after comparison
 The notebook compares:
