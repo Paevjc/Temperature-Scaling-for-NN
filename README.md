@@ -21,21 +21,17 @@ The goal of this project is to reproduce the main calibration workflow from the 
 4. Fit a **temperature scaling** parameter on validation logits by minimising **negative log-likelihood (NLL)**.
 5. Compare calibration **before** and **after** temperature scaling.
 
-## What has been implemented
-From the current notebook, the following pipeline has been completed:
+## Pipeline
 
 ### 1. CIFAR-100 data loading from local pickle files
-The dataset is loaded manually from the original CIFAR-100 Python files rather than directly from PyTorch/TensorFlow loaders.
-
-- `train`
-- `test`
+The dataset is loaded manually from the original CIFAR-100 Python files.
 
 The code unpickles the raw files and extracts:
 - image data: `b'data'`
 - labels: `b'fine_labels'`
 
 ### 2. Data preprocessing
-The raw CIFAR-100 image vectors are reshaped from:
+The raw CIFAR-100 image vectors were reshaped from:
 
 $$
 (50000, 3072) \rightarrow (50000, 3, 32, 32)
@@ -50,13 +46,10 @@ $$
 A validation split is created from the original training set using `train_test_split`, so calibration is fitted on a validation set rather than on the test set.
 
 ### 3. DataLoader preparation
-The NumPy arrays are converted into PyTorch tensors and wrapped in `TensorDataset` / `DataLoader` objects for:
-- training
-- validation
-- testing
+The NumPy arrays are converted into PyTorch tensors and wrapped in `TensorDataset` / `DataLoader` objects for training, validation and testing.
 
 ### 4. Calibration metrics
-Two calibration metrics have been implemented manually:
+Caclibrated metrics were implemented manually directly from the paper.
 
 #### Expected Calibration Error (ECE)
 $$
@@ -74,7 +67,7 @@ where:
 - $\text{conf}(B_m)$ is average confidence in the bin
 
 ### 5. Reliability diagram
-A custom reliability diagram function has been written to visualise the gap between:
+The reliability diagram used in the paper has been used to visualise the gap between:
 - empirical accuracy in each confidence bin
 - average model confidence in each confidence bin
 
@@ -169,6 +162,4 @@ Based on the notebook, the current project uses:
 
 
 ## Summary
-This project is a hands-on replication of the temperature scaling idea from Guo et al. (2017). It loads CIFAR-100 manually, trains a ResNet classifier, computes calibration metrics, fits a temperature parameter on validation logits, and evaluates how calibration improves after scaling.
-
-In short: the notebook is not just training a classifier; it is studying whether the classifier's **confidence scores are trustworthy**.
+This project is a hands-on replication of the temperature scaling idea from Guo et al. (2017). It loads CIFAR-100 manually, trains a ResNet classifier, computes calibration metrics, fits a temperature parameter on validation logits, and evaluates how calibration improves after scaling. This enables us to learn about neural network calibration and how trustworthy their predictions are.
